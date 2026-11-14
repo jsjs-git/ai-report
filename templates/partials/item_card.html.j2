@@ -1,0 +1,88 @@
+{#- 항목 카드 하나.
+    detail 값에 따라 보여주는 양이 달라요.
+      full  : 3줄 요약 + 자세한 설명(배경·변화·의미·논문 해설) + 용어 풀이   (웹 리포트)
+      short : 3줄 요약 + 왜 중요한가 + "자세한 설명 읽기" 버튼              (이메일 기본)
+      brief : 3줄 요약만                                                   (주간 정리)
+-#}
+{% import "partials/components.html.j2" as c %}
+
+{% macro card(item, kind, detail) %}
+{%- set s = item.summary -%}
+<tr>
+  <td id="item-{{ item.uid }}" class="rp-card" bgcolor="{{ t.colors.surface }}" style="padding:{{ t.layout.card_padding }};background:{{ t.colors.surface }};border:1px solid {{ t.colors.border }};border-radius:{{ t.layout.radius }};">
+
+    {#- 윗줄: 배지 + 출처·날짜 -#}
+    <div style="margin:0 0 10px;line-height:2;">
+      {% if kind == "papers" and item.tier %}{{ c.tier(item.tier) }}&nbsp;{% endif %}{{ c.importance(s.importance) }}
+      <span style="margin-left:6px;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">{{ item.source_name }}{% if item.published %} · {{ item.published | kdate_short }}{% endif %}</span>
+    </div>
+
+    {#- 제목 (한국어) + 원제 -#}
+    <a href="{{ item.url }}" target="_blank" rel="noopener" style="text-decoration:none;color:{{ t.colors.text }};">
+      <div class="rp-item-title" style="color:{{ t.colors.text }};font-size:{{ t.sizes.item }};font-weight:700;line-height:1.45;">{{ s.title_ko or item.title }}</div>
+    </a>
+    {% if s.title_ko and s.title_ko != item.title %}
+    <div style="margin-top:4px;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};line-height:1.5;">{{ item.title }}</div>
+    {% endif %}
+
+    {#- 한눈에 보기 (3줄 요약) -#}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
+      <tr>
+        <td bgcolor="{{ t.colors.surface_alt }}" style="padding:14px 16px;background:{{ t.colors.surface_alt }};border-radius:{{ t.layout.radius_small }};">
+          <div style="margin-bottom:4px;color:{{ t.colors.accent }};font-size:{{ t.sizes.tiny }};font-weight:700;letter-spacing:0.04em;">한눈에 보기</div>
+          {% for line in s.headline %}
+          <div style="margin-top:4px;padding-left:14px;text-indent:-14px;color:{{ t.colors.text }};font-size:{{ t.sizes.base }};line-height:1.6;">•&nbsp;{{ line }}</div>
+          {% endfor %}
+        </td>
+      </tr>
+    </table>
+    {% if s.is_fallback %}
+    <div style="margin-top:8px;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">AI 요약 없이 원문 일부를 보여드려요.</div>
+    {% endif %}
+
+    {#- 자세한 설명 -#}
+    {% if detail == "full" %}
+      {% if s.background %}{{ c.label("배경") }}{{ c.para(s.background) }}{% endif %}
+      {% if s.changes %}{{ c.label("무엇이 바뀌었나") }}{{ c.para(s.changes) }}{% endif %}
+      {% if s.paper_idea %}{{ c.label("핵심 아이디어 — 쉽게 말하면") }}{{ c.para(s.paper_idea) }}{% endif %}
+      {% if s.paper_results %}{{ c.label("실험 결과") }}{{ c.para(s.paper_results) }}{% endif %}
+      {% if s.why_it_matters %}{{ c.label("왜 중요한가") }}{{ c.para(s.why_it_matters) }}{% endif %}
+      {% if s.paper_limits %}{{ c.label("한계") }}{{ c.para(s.paper_limits) }}{% endif %}
+      {% if s.glossary %}
+        {{ c.label("용어 풀이") }}
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          {% for g in s.glossary %}
+          <tr>
+            <td style="padding:6px 0;border-top:1px solid {{ t.colors.border }};color:{{ t.colors.text_muted }};font-size:{{ t.sizes.small }};line-height:1.6;">
+              <strong style="color:{{ t.colors.text }};">{{ g.term }}</strong> — {{ g.meaning }}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    {% elif detail == "short" %}
+      {% if s.why_it_matters %}{{ c.label("왜 중요한가") }}{{ c.para(s.why_it_matters) }}{% endif %}
+    {% endif %}
+
+    {#- 논문 정보 -#}
+    {% if kind == "papers" %}
+      {%- set meta = [] -%}
+      {%- if item.citations %}{% set _ = meta.append("인용 " ~ item.citations ~ "회") %}{% endif -%}
+      {%- if item.upvotes is not none %}{% set _ = meta.append("추천 " ~ item.upvotes) %}{% endif -%}
+      {%- if item.venue %}{% set _ = meta.append(item.venue | short(70)) %}{% endif -%}
+      {%- if item.authors %}{% set _ = meta.append(item.authors[:3] | join(", ") ~ (" 외" if item.authors | length > 3 else "")) %}{% endif -%}
+      {% if meta %}
+      <div style="margin-top:16px;color:{{ t.colors.text_muted }};font-size:{{ t.sizes.small }};line-height:1.6;">{{ meta | join(" · ") }}</div>
+      {% endif %}
+    {% endif %}
+
+    {#- 버튼 -#}
+    <div style="margin-top:18px;line-height:2.6;">
+      {{ c.button(item.url, "원문 보기 →") }}
+      {% if detail == "short" and report.web_url and (s.background or s.paper_idea) %}
+      &nbsp;{{ c.button(report.web_url ~ "#item-" ~ item.uid, "자세한 설명 읽기", solid=false) }}
+      {% endif %}
+    </div>
+  </td>
+</tr>
+{% endmacro %}

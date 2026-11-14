@@ -1,0 +1,38 @@
+{#- 리포트 머리: 제목·날짜·한 줄 요약·핵심 3줄 -#}
+{% import "partials/components.html.j2" as c %}
+<tr>
+  <td style="padding:8px 0 20px;">
+    <div style="color:{{ t.colors.accent }};font-size:{{ t.sizes.small }};font-weight:700;letter-spacing:0.02em;">{{ report.title }} · {{ report.mode_label }}</div>
+    <h1 class="rp-title" style="margin:6px 0 0;color:{{ t.colors.text }};font-size:{{ t.sizes.title }};font-weight:800;line-height:1.3;">
+      {%- if report.mode == "weekly" -%}
+        {{ week_start | kdate_short }} ~ {{ report.date | kdate_short }}
+      {%- else -%}
+        {{ report.date | kdate }}
+      {%- endif -%}
+    </h1>
+    {% if report.one_liner %}
+    <p style="margin:12px 0 0;color:{{ t.colors.text_muted }};font-size:{{ t.sizes.base }};line-height:{{ t.sizes.line_height }};">{{ report.one_liner }}</p>
+    {% endif %}
+    <p style="margin:8px 0 0;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">
+      {%- for section in report.sections if section.items -%}
+        {{ section.title }} {{ section.items | length }}건{{ " · " if not loop.last }}
+      {%- endfor -%}
+    </p>
+  </td>
+</tr>
+{% if report.highlights %}
+<tr>
+  <td class="rp-card" bgcolor="{{ t.colors.surface }}" style="padding:{{ t.layout.card_padding }};background:{{ t.colors.surface }};border:1px solid {{ t.colors.border }};border-left:3px solid {{ t.colors.accent }};border-radius:{{ t.layout.radius }};">
+    <div style="color:{{ t.colors.accent }};font-size:{{ t.sizes.tiny }};font-weight:700;letter-spacing:0.04em;">{{ report.label ~ " 핵심" if report.label else ("이번 주 핵심" if report.mode == "weekly" else "오늘의 핵심") }}</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
+      {% for line in report.highlights %}
+      <tr>
+        <td width="28" valign="top" style="padding:5px 0;color:{{ t.colors.accent }};font-size:{{ t.sizes.base }};font-weight:800;">{{ loop.index }}</td>
+        <td valign="top" style="padding:5px 0;color:{{ t.colors.text }};font-size:{{ t.sizes.base }};font-weight:600;line-height:1.5;">{{ line }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </td>
+</tr>
+{{ c.spacer() }}
+{% endif %}

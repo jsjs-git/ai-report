@@ -1,0 +1,14 @@
+# 이 프로그램에 필요한 파이썬 부품(패키지) 목록
+# 설치: pip install -r requirements.txt
+
+anthropic          # Claude API (요약)
+pydantic>=2        # AI 응답 모양 검사
+httpx              # 인터넷에서 페이지·API 가져오기
+feedparser         # RSS/Atom 피드 읽기
+beautifulsoup4     # 웹페이지(HTML)에서 글 뽑기
+pyyaml             # 설정 파일(YAML) 읽기
+jinja2             # HTML 리포트 양식 채우기
+python-dotenv      # .env 파일의 비밀값 읽기
+tzdata             # 윈도우에서 한국 시간대 계산용
+
+pytest             # 테스트 실행용

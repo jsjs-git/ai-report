@@ -1,0 +1,77 @@
+# ═══════════════════════════════════════════════════════════════
+#  새 주제 양식 — 이 파일을 복사해서 쓰세요
+#
+#  1) 이 파일을 복사해서 topics/<주제이름>.yaml 로 저장
+#     예) topics/semiconductor.yaml
+#  2) 아래 <...> 부분을 채우기
+#  3) 미리보기:  python -m reporter --topic semiconductor --dry-run
+#
+#  ※ 파일 이름이 밑줄(_)로 시작하면 실행 목록에서 빠져요 (양식 전용).
+# ═══════════════════════════════════════════════════════════════
+
+topic: my_topic                  # 파일 이름과 똑같이 (영문·숫자·밑줄)
+title: "<리포트 제목>"
+description: "<한 줄 설명>"
+language: ko
+timezone: Asia/Seoul
+theme: dark                      # themes/ 폴더의 디자인 이름
+skip_if_empty: true
+
+sections:
+  # ── 소식 칸 (뉴스·블로그·공지) ──
+  - id: news                     # 영문 이름 (칸마다 다르게)
+    title: "<칸 제목 — 예: 업계 주요 소식>"
+    kind: news
+    filters:
+      lookback_days: 2           # 최근 며칠 글만
+      max_items: 10
+      keywords: []               # 비워두면 전부, 적으면 그 단어가 들어간 글만
+    sources:
+      # 수집 방식(type) 종류:
+      #   rss             : RSS 주소가 있을 때 (가장 안정적)          → url
+      #   webpage         : RSS가 없을 때 목록 페이지에서 링크 뽑기   → url, link_pattern
+      #   webpage+headings: 한 페이지에 날짜별 제목이 쌓이는 변경 기록 → url, mode: headings
+      #   github_releases : GitHub 저장소의 새 버전 소식              → repo
+      - name: "<소스 이름>"
+        group: "<묶음 이름 — 예: 회사명>"   # 리포트에서 이 이름으로 묶이고 색상 태그가 붙어요
+        type: rss
+        url: "<https://example.com/feed.xml>"
+      # - name: "<RSS 없는 사이트>"
+      #   group: "<회사명>"
+      #   type: webpage
+      #   url: "<https://example.com/news>"
+      #   link_pattern: "^https://example\\.com/news/[a-z0-9-]+$"   # 글 주소 모양(정규식)
+      #   require_date: true      # 글에서 날짜를 못 찾으면 제외
+      #   enabled: false          # 잠시 끄기
+      # 모든 소스에 쓸 수 있는 거르기 옵션:
+      #   keywords: ["AI", "칩"]           # 이 단어가 들어간 글만
+      #   exclude_title: "^\\[광고\\]"      # 제목이 이 모양(정규식)이면 빼기
+
+  # ── 논문 칸 (필요 없으면 이 칸을 통째로 지우세요) ──
+  - id: papers
+    title: "<칸 제목 — 예: 주목할 연구>"
+    kind: papers
+    filters:
+      keywords: ["<keyword 1>", "<keyword 2>"]   # 논문은 영어 키워드로 (너무 넓은 단어는 피하기)
+      min_keyword_hits: 2      # 제목에 키워드가 있거나, 초록에 서로 다른 키워드가 2개 이상이면 통과
+      enrich_citations: true
+      new:      { lookback_days: 7,   min_upvotes: 10, labs: [], max_items: 5 }
+      proven:   { lookback_days: 365, min_citations: 50, venues: [], max_items: 2 }
+    sources:
+      - name: arXiv
+        type: arxiv
+        categories: ["<arXiv 분류 — 예: cs.AI, eess.SP, q-fin.GN>"]
+      - name: Semantic Scholar
+        type: semantic_scholar
+        fields_of_study: ["<분야 — 예: Computer Science, Engineering, Economics>"]
+
+summary:
+  enabled: true
+  model: claude-opus-5-5
+  effort: medium
+  detail_level: detailed
+
+delivery:
+  web:   { enabled: true,  base_url: "${REPORT_BASE_URL}" }
+  email: { enabled: true,  to: ["${REPORT_EMAIL_TO}"], full_detail: false }
+  kakao: { enabled: false, summary_lines: 3, button_title: "웹 리포트 보기" }

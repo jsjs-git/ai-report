@@ -1,0 +1,12 @@
+{#- 리포트 바닥: 웹/지난 리포트 링크 + 안내 문구 -#}
+{% import "partials/components.html.j2" as c %}
+<tr>
+  <td style="padding:24px 0 8px;border-top:1px solid {{ t.colors.border }};">
+    {% if channel != "web" and report.web_url %}{{ c.button(report.web_url, "웹에서 보기", solid=false) }}&nbsp;{% endif %}
+    {% if report.archive_url %}{{ c.button(report.archive_url, "지난 리포트", solid=false) }}{% endif %}
+    <p style="margin:16px 0 0;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};line-height:1.7;">
+      이 리포트는 공식 발표와 논문을 자동으로 모아 AI가 요약했어요. 요약에는 실수가 있을 수 있으니 중요한 내용은 원문을 확인해 주세요.
+    </p>
+    <p style="margin:6px 0 0;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">{{ report.title }} · {{ generated_at }}</p>
+  </td>
+</tr>

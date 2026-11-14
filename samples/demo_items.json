@@ -1,0 +1,135 @@
+{
+  "_설명": "체험판(topics/demo.yaml)용 가상 데이터예요. 실제 회사·소식이 아닙니다.",
+  "items": [
+    {
+      "section_key": "updates",
+      "group": "예시 연구소 A",
+      "title": "[예시] Example Lab A releases an agent toolkit",
+      "url": "https://example.com/lab-a/agent-toolkit",
+      "hours_ago": 5,
+      "text": "Sample text.",
+      "summary": {
+        "title_ko": "[예시] 예시 연구소 A, AI 에이전트용 작업 도구 공개",
+        "headline": [
+          "AI가 여러 단계의 일을 스스로 처리하도록 돕는 '에이전트 도구 모음'을 공개했어요.",
+          "파일 읽기·검색·코드 실행 같은 기능을 몇 줄 설정으로 연결할 수 있어요.",
+          "개발자가 에이전트를 직접 만드는 데 드는 시간이 크게 줄어들 전망이에요."
+        ],
+        "background": "지금까지 AI에게 '자료를 찾아서 정리하고 파일로 저장해 줘' 같은 여러 단계의 일을 시키려면, 개발자가 각 단계를 연결하는 코드를 직접 길게 짜야 했어요. 이 연결 장치를 흔히 '하네스(harness)'라고 불러요.",
+        "changes": "이번 도구 모음에는 자주 쓰는 기능(검색, 파일 처리, 코드 실행)이 미리 들어 있고, AI가 어떤 기능을 언제 쓸지 스스로 고르도록 기본 흐름이 짜여 있어요. 개발자는 필요한 기능만 골라 켜면 돼요.",
+        "why_it_matters": "에이전트를 만드는 진입 장벽이 낮아져서, 작은 팀이나 개인도 업무 자동화 도구를 빠르게 만들 수 있어요. 다른 회사들도 비슷한 도구를 내놓으며 경쟁이 붙을 가능성이 커요.",
+        "glossary": [
+          {"term": "에이전트", "meaning": "목표만 주면 필요한 단계를 스스로 계획하고 도구를 써서 일을 끝내는 AI 프로그램"},
+          {"term": "하네스", "meaning": "AI 모델과 도구들을 연결해 실제로 일을 하게 만드는 바깥쪽 틀(뼈대 코드)"}
+        ],
+        "importance": "상"
+      }
+    },
+    {
+      "section_key": "updates",
+      "group": "예시 연구소 B",
+      "title": "[예시] Example Lab B expands context window",
+      "url": "https://example.com/lab-b/context",
+      "hours_ago": 12,
+      "text": "Sample text.",
+      "summary": {
+        "title_ko": "[예시] 예시 연구소 B, 한 번에 읽을 수 있는 글 분량 4배로 확대",
+        "headline": [
+          "AI가 한 번에 읽고 기억할 수 있는 분량(문맥 창)을 4배로 늘렸어요.",
+          "책 여러 권 분량의 자료를 한꺼번에 넣고 질문할 수 있어요.",
+          "가격은 그대로라 긴 문서를 다루는 사용자에게 유리해요."
+        ],
+        "background": "AI는 대화나 문서를 '문맥 창'이라는 정해진 크기 안에서만 볼 수 있어요. 자료가 이보다 길면 잘라서 여러 번 나눠 넣어야 해서 불편하고 내용이 끊겼어요.",
+        "changes": "문맥 창이 기존보다 4배 커졌고, 긴 자료 중간에 있는 정보를 찾는 정확도도 개선됐다고 밝혔어요.",
+        "why_it_matters": "계약서 묶음, 긴 회의록, 큰 코드 저장소처럼 분량이 많은 자료를 통째로 분석할 수 있어 업무 활용 범위가 넓어져요.",
+        "glossary": [
+          {"term": "문맥 창(컨텍스트 윈도우)", "meaning": "AI가 한 번에 읽고 참고할 수 있는 글의 최대 분량"}
+        ],
+        "importance": "중"
+      }
+    },
+    {
+      "section_key": "updates",
+      "group": "예시 연구소 B",
+      "title": "[예시] Example SDK v2.3.0",
+      "url": "https://example.com/lab-b/sdk-2-3-0",
+      "hours_ago": 20,
+      "text": "Sample text.",
+      "summary": {
+        "title_ko": "[예시] 예시 SDK 2.3.0 버전 출시",
+        "headline": [
+          "개발자용 연결 도구(SDK)의 새 버전이 나왔어요.",
+          "응답을 원하는 모양(JSON)으로 받는 기능이 정식 지원돼요.",
+          "기존 코드는 그대로 동작해서 바로 업데이트해도 돼요."
+        ],
+        "background": "SDK는 개발자가 AI 서비스를 자기 프로그램에 쉽게 붙일 수 있게 해 주는 도구 꾸러미예요.",
+        "changes": "AI의 답을 미리 정한 표 모양(JSON)으로 받는 기능이 시험판에서 정식 기능이 됐고, 오류 메시지가 더 알기 쉽게 바뀌었어요.",
+        "why_it_matters": "AI 답을 다른 프로그램에서 바로 쓰기 쉬워져서 자동화 작업이 더 안정적이 돼요.",
+        "glossary": [
+          {"term": "SDK", "meaning": "어떤 서비스를 프로그램에서 쉽게 쓰도록 만든 도구 꾸러미"},
+          {"term": "JSON", "meaning": "컴퓨터끼리 데이터를 주고받을 때 쓰는 정해진 글자 형식"}
+        ],
+        "importance": "하"
+      }
+    },
+    {
+      "section_key": "papers",
+      "group": "논문",
+      "title": "[Example] Tool-Use Agents Learn When Not to Call Tools",
+      "url": "https://example.com/papers/tool-use",
+      "hours_ago": 30,
+      "text": "Sample abstract.",
+      "upvotes": 128,
+      "authors": ["Example Author A", "Example Author B"],
+      "paper_ids": {"arxiv": "0000.00001"},
+      "summary": {
+        "title_ko": "[예시] 도구를 '안 쓰는 법'까지 배우는 AI 에이전트",
+        "headline": [
+          "AI가 검색·계산기 같은 도구를 꼭 필요할 때만 쓰도록 훈련하는 방법을 제안했어요.",
+          "불필요한 도구 호출이 절반으로 줄고 정답률은 오히려 올랐어요.",
+          "에이전트 비용과 속도를 함께 개선할 수 있는 아이디어예요."
+        ],
+        "background": "도구를 쓸 수 있는 AI는 자신 없을 때마다 검색을 하거나 계산기를 부르는 경향이 있어요. 그만큼 느리고 비용이 들어요.",
+        "changes": "AI가 문제를 풀기 전에 '내가 이미 아는 내용인가?'를 먼저 판단하도록 훈련 데이터를 구성했어요.",
+        "why_it_matters": "실제 서비스에서 에이전트 비용의 큰 부분이 도구 호출이라, 정확도를 지키면서 호출을 줄이는 방법은 바로 쓸모가 있어요.",
+        "paper_idea": "숙련된 요리사가 레시피를 매번 찾아보지 않고, 처음 만드는 요리일 때만 책을 펴는 것과 같아요. AI에게 '책을 펴야 할 때'를 구분하는 감각을 가르친 거예요.",
+        "paper_results": "여러 시험 문제에서 도구 호출 횟수가 평균 52% 줄었고, 정답률은 3%포인트 올랐어요.",
+        "paper_limits": "시험 문제 위주로 평가해서, 실제 업무처럼 복잡한 상황에서도 같은 효과가 날지는 더 확인이 필요해요.",
+        "glossary": [
+          {"term": "도구 호출(tool call)", "meaning": "AI가 검색·계산·코드 실행 같은 외부 기능을 불러 쓰는 것"}
+        ],
+        "importance": "상"
+      }
+    },
+    {
+      "section_key": "papers",
+      "group": "논문",
+      "title": "[Example] A Survey of Context Engineering for LLM Agents",
+      "url": "https://example.com/papers/context-survey",
+      "hours_ago": 2000,
+      "text": "Sample abstract.",
+      "citations": 214,
+      "venue": "Example Conference 2026",
+      "paper_ids": {"arxiv": "0000.00002"},
+      "summary": {
+        "title_ko": "[예시] AI 에이전트를 위한 '컨텍스트 엔지니어링' 총정리",
+        "headline": [
+          "AI에게 무엇을, 어떤 순서로, 얼마나 보여줄지 설계하는 방법들을 정리한 논문이에요.",
+          "프롬프트 작성법을 넘어 기억·검색·요약까지 하나의 설계 문제로 다뤄요.",
+          "발표 후 인용이 빠르게 늘어 이 분야의 기본 참고 자료가 됐어요."
+        ],
+        "background": "처음에는 '질문을 잘 쓰는 법(프롬프트 엔지니어링)'이 주목받았지만, 에이전트가 길게 일하면서 '어떤 정보를 AI 앞에 놓아줄지'가 더 중요해졌어요.",
+        "changes": "흩어져 있던 기법들을 '모으기 → 고르기 → 줄이기 → 배치하기' 네 단계로 분류하고 각 단계의 대표 방법을 비교했어요.",
+        "why_it_matters": "에이전트를 만드는 사람에게 체크리스트처럼 쓸 수 있는 정리라서, 실무 설계에 바로 참고할 수 있어요.",
+        "paper_idea": "시험 볼 때 책상 위에 어떤 참고서를 펼쳐 둘지 고르는 것과 같아요. 너무 많으면 헷갈리고, 너무 적으면 답을 못 찾아요.",
+        "paper_results": "200편 이상의 연구를 비교해, 정보를 '줄이고 배치하는' 단계가 성능에 가장 큰 영향을 준다는 공통점을 찾았어요.",
+        "paper_limits": "정리 논문이라 새 실험보다는 기존 연구 비교가 중심이에요.",
+        "glossary": [
+          {"term": "컨텍스트 엔지니어링", "meaning": "AI가 일할 때 보게 될 정보(지시·자료·기억)를 설계하고 관리하는 기술"},
+          {"term": "프롬프트", "meaning": "AI에게 주는 지시문이나 질문"}
+        ],
+        "importance": "중"
+      }
+    }
+  ]
+}

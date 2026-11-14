@@ -1,0 +1,226 @@
+# ═══════════════════════════════════════════════════════════════
+#  AI 동향 리포트 — 주제 설정 파일
+#  이 파일만 고치면 리포트 내용이 바뀌어요. (코드 수정 필요 없음)
+#  새 주제를 만들 때는 _template.yaml 을 복사해서 시작하세요.
+# ═══════════════════════════════════════════════════════════════
+
+topic: ai_trends                 # 영문·숫자·밑줄만 (파일 이름과 같게)
+title: "AI 동향 리포트"
+description: "Claude · Gemini · ChatGPT · Meta 공식 업데이트와 주목할 AI 논문"
+language: ko
+timezone: Asia/Seoul
+theme: dark                      # themes/dark.yaml 디자인 사용
+skip_if_empty: true              # 새 소식이 없는 날은 보내지 않기
+report_label: "주간"             # 리포트·카톡 제목에 붙는 이름
+# 발송 시각: Claude 데스크톱 앱 예약 작업 '매주 월요일 06:30' (README 7장)
+
+# ───────────────────────────────────────────────────────────────
+#  리포트에 들어갈 칸(섹션)
+#   kind: news   → 공식 발표·블로그·릴리스 (기업별로 묶어서 표시)
+#   kind: papers → 논문 (신규 주목 / 검증된 논문으로 나눠 표시)
+# ───────────────────────────────────────────────────────────────
+sections:
+  - id: official_updates
+    title: "빅테크 공식 업데이트"
+    kind: news
+    filters:
+      lookback_days: 7           # 지난 일주일 안에 올라온 글만 (주 1회 발송)
+      max_items: 12              # 후보 수 (기술 소식이 아닌 건 요약 단계에서 빠져요 — summary.include_rule)
+      max_per_group: 3           # 한 회사당 최대 3건 (여러 회사 소식이 고르게, separate_count 소스는 따로)
+      keywords: []               # 비워두면 모든 글 (소스별 keywords로 따로 거를 수 있음)
+    sources:
+      # ── Anthropic (Claude) ──
+      - name: Anthropic 뉴스
+        group: Anthropic
+        type: webpage            # RSS가 없어서 목록 페이지에서 글 링크를 뽑아요
+        url: "https://www.anthropic.com/news"
+        link_pattern: "^https://www\\.anthropic\\.com/news/[a-z0-9-]+$"
+        exclude_pattern: "/news/(announcements|partnerships|features|product|policy|research|societal-impacts|customer-stories|events|public-benefit-fund)$"
+        require_date: true       # 글 페이지에서 날짜를 못 찾으면 제외 (분류 페이지 걸러내기)
+        max_items: 12
+      - name: Claude 개발자 릴리스 노트   # 새 기능이 가장 먼저·구체적으로 나오는 곳 (기술 공부용)
+        group: Anthropic
+        type: webpage
+        mode: headings           # 한 페이지에 날짜별 제목이 쌓이는 형태
+        url: "https://platform.claude.com/docs/en/release-notes/overview"
+        heading_id_pattern: "^[a-z]+-\\d{1,2}-\\d{4}$"
+        max_items: 5
+        separate_count: true     # 회사당 3건 제한과 별도로 세기
+      # ↓ SDK·도구 버전 소식은 대부분 작은 수정이라 꺼 뒀어요. 필요하면 enabled: true
+      - name: Claude Code 릴리스
+        group: Anthropic
+        type: github_releases
+        repo: anthropics/claude-code
+        max_items: 5
+        enabled: false
+      - name: Anthropic Python SDK
+        group: Anthropic
+        type: github_releases
+        repo: anthropics/anthropic-sdk-python
+        max_items: 3
+        enabled: false
+
+      # ── OpenAI (ChatGPT) ──
+      - name: OpenAI 뉴스
+        group: OpenAI
+        type: rss
+        url: "https://openai.com/news/rss.xml"
+        exclude_title: "(with|using) (AI|OpenAI|ChatGPT|Codex)$|^How .+ (uses|ships|builds|scales)\\b"   # 고객 사례 글 제외
+      - name: OpenAI Python SDK
+        group: OpenAI
+        type: github_releases
+        repo: openai/openai-python
+        max_items: 3
+        enabled: false           # 개발자용
+
+      # ── Google (Gemini) ──
+      - name: Google AI 블로그
+        group: Google
+        type: rss
+        url: "https://blog.google/technology/ai/rss/"
+      - name: Google DeepMind 블로그
+        group: Google
+        type: rss
+        url: "https://deepmind.google/blog/rss.xml"
+      - name: Google 개발자 블로그
+        group: Google
+        type: rss
+        url: "https://developers.googleblog.com/feeds/posts/default"
+        keywords: ["Gemini", "AI", "Gemma", "agent"]   # AI 관련 글만
+        enabled: false           # 개발자용
+      - name: Gemini Python SDK
+        group: Google
+        type: github_releases
+        repo: googleapis/python-genai
+        max_items: 3
+        enabled: false           # 개발자용
+
+      # ── Meta ──
+      - name: Meta AI 블로그
+        group: Meta
+        type: webpage
+        url: "https://ai.meta.com/blog/"
+        link_pattern: "^https://ai\\.meta\\.com/blog/[a-z0-9-]+/?$"
+        max_items: 8
+
+      # ── 관심 목록 (기본 꺼짐: enabled를 true로 바꾸면 추적 시작) ──
+      - name: xAI 뉴스
+        group: xAI
+        type: webpage
+        url: "https://x.ai/news"
+        link_pattern: "^https://x\\.ai/news/[a-z0-9-]+$"
+        require_date: true
+        enabled: false
+      - name: Mistral 뉴스
+        group: Mistral
+        type: rss
+        url: "https://mistral.ai/news/rss"
+        enabled: false
+      - name: Qwen 블로그
+        group: Qwen
+        type: rss
+        url: "https://qwenlm.github.io/blog/index.xml"
+        enabled: false
+      - name: DeepSeek 릴리스
+        group: DeepSeek
+        type: webpage
+        url: "https://api-docs.deepseek.com/news/news1226"
+        link_pattern: "^https://api-docs\\.deepseek\\.com/news/news\\d+$"
+        enabled: false
+
+  - id: papers
+    title: "주목할 논문"
+    kind: papers
+    filters:
+      # 프롬프트·하네스 등 관심 주제
+      # 제목에 하나라도 있거나, 초록에 서로 다른 키워드가 min_keyword_hits개 이상 있으면 통과
+      # (benchmark·alignment 같은 넓은 단어는 관계없는 논문까지 걸려서 뺐어요)
+      keywords:
+        - prompt engineering
+        - prompt optimization
+        - prompting
+        - system prompt
+        - context engineering
+        - context window
+        - agent harness
+        - agent scaffold
+        - scaffolding
+        - tool use
+        - tool calling
+        - function calling
+        - LLM agent
+        - language agent
+        - coding agent
+        - agentic
+        - multi-agent
+        - chain-of-thought
+        - reasoning model
+        - test-time compute
+        - retrieval-augmented
+        - in-context learning
+      min_keyword_hits: 2
+      enrich_citations: true     # Semantic Scholar로 인용수·학회 정보 보강
+      new:                       # A. 신규 주목 논문 (인용수가 아직 없으니 다른 신호로 판단)
+        lookback_days: 7
+        min_upvotes: 10          # Hugging Face 추천수 기준
+        labs: [Anthropic, OpenAI, Google, DeepMind, Meta, FAIR, Microsoft, NVIDIA, Apple, Stanford, Berkeley, MIT, CMU, Tsinghua, Alibaba, DeepSeek, Mistral]
+        max_items: 2             # 주 2편
+      proven:                    # B. 검증된 획기적 논문
+        lookback_days: 365
+        min_citations: 50        # 인용 50회 이상이거나
+        venues: [NeurIPS, ICML, ICLR, ACL, EMNLP, NAACL, CVPR, AAAI, TMLR, Nature, Science]   # 이 학회/저널에 실렸거나
+        max_items: 1             # 주 1편 (밀린 논문이 한꺼번에 오지 않게)
+    sources:
+      - name: arXiv
+        type: arxiv
+        categories: [cs.CL, cs.AI, cs.LG]
+        max_results: 100
+      - name: Hugging Face 오늘의 논문
+        type: hf_papers
+        days: 7
+      - name: Semantic Scholar
+        type: semantic_scholar
+        fields_of_study: ["Computer Science"]
+        max_items: 20
+
+# ───────────────────────────────────────────────────────────────
+#  AI 요약 설정
+# ───────────────────────────────────────────────────────────────
+summary:
+  enabled: true                  # API 키가 있을 때만 API로 요약 (예약 작업 방식은 Claude가 직접 작성)
+  model: claude-opus-5-5         # (API 사용 시) 비용을 줄이려면 claude-sonnet-5-5 또는 claude-haiku-5-5
+  effort: medium
+  detail_level: detailed         # brief: 3줄 요약만 / detailed: 요약 + 자세한 설명 + 용어 풀이
+  # 독자에 맞춘 글쓰기 지침 — 주제마다 바꿀 수 있어요
+  guide: |
+    - 독자는 AI를 잘 모르는 일반인이야. 중학생도 이해할 수 있게 써.
+    - 전문용어는 되도록 쓰지 말고 일상어로 바꿔. 꼭 써야 하면 바로 뒤 괄호에 쉬운 말로 풀어.
+      (예: "에이전트(스스로 일을 처리하는 AI 비서)")
+    - 항목마다 일상생활 비유를 하나 이상 넣어.
+    - why_it_matters 는 "이 기술로 무엇이 새로 가능해졌나, 기술을 공부하는 사람이 알아둘 점은?"에 답해.
+    - 문장은 짧게, 한 문장에 한 가지 내용만.
+    - headline 3줄은 각 40자 이내로, 쉬운 말로.
+    - 회사·제품 이름은 처음 나올 때 무엇인지 짧게 소개해 (예: "Anthropic(Claude를 만든 회사)").
+    - highlights(카톡에 가는 3줄)는 각 30자 이내, 누구나 바로 알아듣는 말로.
+  # 어떤 소식을 남길지 — 맞지 않는 항목은 요약할 때 빠져요 (예약 작업 방식)
+  include_rule: |
+    기술을 공부하려는 독자를 위한 리포트야. '기술적으로 무엇이 새로 나왔거나 바뀌었는지'를 다루는 소식만 남겨.
+    - 남길 것: 새 AI 모델·기능 출시, 성능·가격·사용법 변화, 새 개발 도구·API, 기술 연구 결과, 보안·안전 '기술'
+    - 뺄 것: 기부·후원·연구비 지원 같은 사업 발표, 특정 집단 무료 제공 같은 프로모션, 고객·도입 사례, 인터뷰,
+      투자·상장·실적 같은 경영 소식, 행사·채용·정책 입장 발표
+
+# ───────────────────────────────────────────────────────────────
+#  발송 채널 — enabled: true 인 채널로만 보내요
+# ───────────────────────────────────────────────────────────────
+delivery:
+  web:
+    enabled: true
+    base_url: "${REPORT_BASE_URL}"     # .env 또는 GitHub Secret 값 사용
+  email:
+    enabled: false                     # 카카오톡으로만 받기
+    to: ["${REPORT_EMAIL_TO}"]         # 비어 있으면 보내는 Gmail 주소로 받아요
+    full_detail: false                 # true면 메일에도 자세한 설명 전체 포함
+  kakao:
+    enabled: true
+    summary_lines: 3
+    button_title: "웹 리포트 보기"

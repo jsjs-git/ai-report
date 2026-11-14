@@ -1,0 +1,42 @@
+{#- 작은 부품 모음 (태그·배지·버튼·소제목). 다른 양식에서 import 해서 써요. -#}
+
+{# 둥근 태그: 묶음 이름(기업명) 등 #}
+{% macro tag(text, color) -%}
+<span style="display:inline-block;padding:2px 10px;border:1px solid {{ color }};border-radius:999px;color:{{ color }};font-size:{{ t.sizes.tiny }};font-weight:600;line-height:1.6;white-space:nowrap;">{{ text }}</span>
+{%- endmacro %}
+
+{# 중요도 배지 #}
+{% macro importance(level) -%}
+{%- set color = theme.importance_color(level) -%}
+<span style="display:inline-block;padding:2px 8px;border-radius:{{ t.layout.radius_small }};background:{{ t.colors.surface_alt }};color:{{ color }};font-size:{{ t.sizes.tiny }};font-weight:700;line-height:1.6;white-space:nowrap;">중요도 {{ level }}</span>
+{%- endmacro %}
+
+{# 논문 구분 배지 #}
+{% macro tier(name) -%}
+{%- set color = theme.tier_color(name) -%}
+<span style="display:inline-block;padding:2px 8px;border-radius:{{ t.layout.radius_small }};background:{{ t.colors.surface_alt }};color:{{ color }};font-size:{{ t.sizes.tiny }};font-weight:700;line-height:1.6;white-space:nowrap;">{{ "신규 주목" if name == "new" else "검증된 논문" }}</span>
+{%- endmacro %}
+
+{# 버튼 (이메일에서도 잘 보이는 방식) #}
+{% macro button(url, label, solid=true) -%}
+{%- if solid -%}
+<a class="rp-btn" href="{{ url }}" target="_blank" rel="noopener" style="display:inline-block;padding:10px 18px;line-height:1.4;border-radius:{{ t.layout.radius_small }};background:{{ t.colors.accent }};color:{{ t.colors.accent_text }};font-size:{{ t.sizes.small }};font-weight:700;text-decoration:none;">{{ label }}</a>
+{%- else -%}
+<a class="rp-btn" href="{{ url }}" target="_blank" rel="noopener" style="display:inline-block;padding:9px 16px;line-height:1.4;border-radius:{{ t.layout.radius_small }};border:1px solid {{ t.colors.border }};color:{{ t.colors.text }};font-size:{{ t.sizes.small }};font-weight:600;text-decoration:none;">{{ label }}</a>
+{%- endif -%}
+{%- endmacro %}
+
+{# 카드 안 소제목 (배경 / 무엇이 바뀌었나 …) #}
+{% macro label(text) -%}
+<div style="margin:18px 0 4px;color:{{ t.colors.accent }};font-size:{{ t.sizes.tiny }};font-weight:700;letter-spacing:0.04em;">{{ text }}</div>
+{%- endmacro %}
+
+{# 문단 #}
+{% macro para(text) -%}
+<p style="margin:0;color:{{ t.colors.text }};font-size:{{ t.sizes.base }};line-height:{{ t.sizes.line_height }};">{{ text }}</p>
+{%- endmacro %}
+
+{# 카드 사이 빈 줄 #}
+{% macro spacer() -%}
+<tr><td style="height:{{ t.layout.gap }};line-height:{{ t.layout.gap }};font-size:0;">&nbsp;</td></tr>
+{%- endmacro %}

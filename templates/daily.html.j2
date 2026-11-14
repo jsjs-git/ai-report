@@ -1,0 +1,10 @@
+{#- 매일 리포트 (웹·이메일 공용). 배치만 담당하고, 모양은 partials/ 조각과 테마가 정해요. -#}
+{% extends "base.html.j2" %}
+{% block title %}{{ report.title }} · {{ report.date | kdate }}{% endblock %}
+{% block content %}
+{% include "partials/header.html.j2" %}
+{% for section in report.sections if section.items %}
+  {% include "partials/section.html.j2" %}
+{% endfor %}
+{% include "partials/footer.html.j2" %}
+{% endblock %}

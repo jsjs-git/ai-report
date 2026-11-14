@@ -1,0 +1,34 @@
+{#- 칸(섹션) 하나: 제목 + 카드 목록.
+    news   → 묶음(기업)별로 태그를 달아 표시
+    papers → 신규 주목 / 검증된 논문으로 나눠 표시 -#}
+{% import "partials/components.html.j2" as c %}
+{% from "partials/item_card.html.j2" import card with context %}
+<tr>
+  <td style="padding:16px 0 12px;">
+    <h2 style="margin:0;color:{{ t.colors.text }};font-size:{{ t.sizes.section }};font-weight:800;">
+      <span style="display:inline-block;width:4px;height:18px;margin-right:8px;vertical-align:-2px;background:{{ t.colors.accent }};border-radius:2px;"></span>{{ section.title }}
+      <span style="margin-left:4px;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.small }};font-weight:600;">{{ section.items | length }}건</span>
+    </h2>
+  </td>
+</tr>
+{% if section.kind == "papers" %}
+  {% for tier_name, tier_title, tier_desc in [
+      ("new", "A. 신규 주목 논문", "최근 일주일 · 연구자 추천수, 주요 연구소, 학회 채택 기준"),
+      ("proven", "B. 검증된 논문", "최근 1년 · 인용수 또는 주요 학회·저널 게재 기준")] %}
+    {% set tier_items = section.tier_items(tier_name) %}
+    {% if tier_items %}
+    <tr>
+      <td style="padding:4px 0 10px;">
+        <span style="color:{{ theme.tier_color(tier_name) }};font-size:{{ t.sizes.small }};font-weight:700;">{{ tier_title }}</span>
+        <span style="margin-left:6px;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">{{ tier_desc }}</span>
+      </td>
+    </tr>
+    {% for item in tier_items %}{{ card(item, "papers", detail) }}{{ c.spacer() }}{% endfor %}
+    {% endif %}
+  {% endfor %}
+{% else %}
+  {% for group, items in section.groups() %}
+    <tr><td style="padding:4px 0 10px;">{{ c.tag(group, group_color(group)) }}</td></tr>
+    {% for item in items %}{{ card(item, "news", detail) }}{{ c.spacer() }}{% endfor %}
+  {% endfor %}
+{% endif %}

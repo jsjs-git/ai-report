@@ -1,0 +1,23 @@
+{#- 웹 첫 화면: 모든 주제 목록 (docs/index.html) -#}
+{% extends "base.html.j2" %}
+{% import "partials/components.html.j2" as c %}
+{% block title %}리포트 모음{% endblock %}
+{% block content %}
+<tr>
+  <td style="padding:8px 0 20px;">
+    <h1 class="rp-title" style="margin:0;color:{{ t.colors.text }};font-size:{{ t.sizes.title }};font-weight:800;">리포트 모음</h1>
+  </td>
+</tr>
+{% for tp in topics %}
+<tr>
+  <td class="rp-card" bgcolor="{{ t.colors.surface }}" style="padding:{{ t.layout.card_padding }};background:{{ t.colors.surface }};border:1px solid {{ t.colors.border }};border-radius:{{ t.layout.radius }};">
+    <a href="{{ tp.href }}" style="text-decoration:none;">
+      <div class="rp-item-title" style="color:{{ t.colors.text }};font-size:{{ t.sizes.item }};font-weight:700;">{{ tp.title }}</div>
+      {% if tp.description %}<p style="margin:6px 0 0;color:{{ t.colors.text_muted }};font-size:{{ t.sizes.small }};">{{ tp.description }}</p>{% endif %}
+      {% if tp.latest %}<p style="margin:6px 0 0;color:{{ t.colors.text_faint }};font-size:{{ t.sizes.tiny }};">최근: {{ tp.latest }}</p>{% endif %}
+    </a>
+  </td>
+</tr>
+{{ c.spacer() }}
+{% endfor %}
+{% endblock %}

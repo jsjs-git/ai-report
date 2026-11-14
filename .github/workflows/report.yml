@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════════════════════
+#  [예비] PC를 꺼 둬도 돌아가는 방식 (GitHub Actions + Claude API)
+#  지금은 PC 예약 작업 방식을 쓰므로 자동 실행은 꺼져 있어요. (수동 버튼만)
+#  이 방식으로 바꾸려면 아래 schedule 의 # 을 지우고, Secrets 에 ANTHROPIC_API_KEY 등을 넣으세요.
+#  웹 리포트는 docs/ 에 커밋되고, GitHub Pages(Deploy from a branch: main /docs)가 보여줘요.
+# ═══════════════════════════════════════════════════════════════
+name: 리포트 발송 (예비)
+
+on:
+  # schedule:
+  #   - cron: "0 23 * * 0"     # 일요일 UTC 23:00 = 한국 월요일 08:00
+  workflow_dispatch:          # Actions 탭에서 [Run workflow] 버튼으로 직접 실행
+    inputs:
+      topics:
+        description: "주제 이름 (여러 개면 띄어쓰기로 구분)"
+        default: "ai_trends"
+
+env:
+  TOPICS: "ai_trends"        # 자동 실행할 주제 목록 (새 주제를 만들면 여기에 추가)
+
+permissions:
+  contents: write            # 보낸 기록(data/)과 웹 리포트(docs/)를 저장소에 저장
+
+concurrency:
+  group: report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 필요한 부품 설치
+        run: pip install -r requirements.txt
+
+      - name: 리포트 만들고 보내기
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPORT_BASE_URL: ${{ vars.REPORT_BASE_URL }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}            # 카카오 토큰 자동 갱신 시 Secret 업데이트용
+          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+          GITHUB_API_TOKEN: ${{ github.token }}
+        run: |
+          status=0
+          for topic in ${{ inputs.topics || env.TOPICS }}; do
+            echo "::group::$topic"
+            python -m reporter --topic "$topic" || status=1
+            echo "::endgroup::"
+          done
+          exit $status
+
+      - name: 보낸 기록과 웹 리포트 저장
+        if: always()
+        run: |
+          git config user.name "report-bot"
+          git config user.email "report-bot@users.noreply.github.com"
+          mkdir -p data docs
+          git add data docs
+          if git diff --staged --quiet; then
+            echo "바뀐 내용 없음"
+          else
+            git commit -m "report: $(date -u +%Y-%m-%d)"
+            git push
+          fi

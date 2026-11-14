@@ -1,0 +1,27 @@
+{#- 모든 페이지의 바깥 틀. 색·크기 값은 테마(t)에서만 가져와요. -#}
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>{% block title %}{% endblock %}</title>
+{% if channel == "web" and t.fonts.web_import %}<link rel="stylesheet" href="{{ t.fonts.web_import }}">{% endif %}
+<style>{{ theme.css(channel) | safe }}</style>
+</head>
+<body style="margin:0;padding:0;background:{{ t.colors.bg }};color:{{ t.colors.text }};font-family:{{ t.fonts.body }};font-size:{{ t.sizes.base }};line-height:{{ t.sizes.line_height }};-webkit-text-size-adjust:100%;">
+{%- if preheader %}
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:{{ t.colors.bg }};">{{ preheader }}</div>
+{%- endif %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="{{ t.colors.bg }}" style="background:{{ t.colors.bg }};">
+  <tr>
+    <td align="center" class="rp-page" bgcolor="{{ t.colors.bg }}" style="padding:{{ t.layout.page_padding }};background:{{ t.colors.bg }};">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:{{ t.layout.max_width }};width:100%;">
+{% block content %}{% endblock %}
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

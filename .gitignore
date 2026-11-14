@@ -1,0 +1,18 @@
+# 비밀값 — 절대 git에 올리지 않기
+.env
+.secrets/
+
+# 미리보기 결과물 (dry-run)
+out/
+
+# 내 컴퓨터 전용 Claude 설정
+.claude/settings.local.json
+
+# 파이썬 임시 파일
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# 참고: data/(보낸 기록)와 docs/(웹 리포트, GitHub Pages)는 git에 올립니다.

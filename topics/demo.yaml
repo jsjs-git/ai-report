@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════
+#  체험용 주제 — 인터넷·API 키 없이 리포트 모양을 미리 볼 수 있어요
+#    python -m reporter --topic demo --dry-run
+#  → out/ 폴더에 웹 리포트·이메일·카카오톡 미리보기가 만들어져요.
+#  (samples/demo_items.json 의 예시 데이터를 사용)
+# ═══════════════════════════════════════════════════════════════
+
+topic: demo
+title: "리포트 체험판"
+description: "예시 데이터로 만든 리포트 (실제 소식 아님)"
+theme: dark
+skip_if_empty: false
+
+sections:
+  - id: updates
+    title: "공식 업데이트 (예시)"
+    kind: news
+    filters: { lookback_days: 3650, max_items: 10 }
+    sources:
+      - name: 예시 소스
+        type: sample
+        file: samples/demo_items.json
+        section_key: updates
+
+  - id: papers
+    title: "주목할 논문 (예시)"
+    kind: papers
+    filters:
+      keywords: []
+      new:    { lookback_days: 3650, min_upvotes: 10, labs: [], max_items: 5 }
+      proven: { lookback_days: 3650, min_citations: 50, venues: [], max_items: 5 }
+    sources:
+      - name: 예시 논문
+        type: sample
+        file: samples/demo_items.json
+        section_key: papers
+
+summary:
+  enabled: false                 # 예시 데이터에 요약이 미리 들어 있어요
+
+delivery:
+  web:   { enabled: true,  base_url: "https://example.github.io/mailing_service/" }
+  email: { enabled: true,  to: ["me@example.com"], full_detail: false }
+  kakao: { enabled: true,  summary_lines: 3, button_title: "웹 리포트 보기" }
