@@ -1,0 +1,13 @@
+{
+  "title": "AI 동향 리포트",
+  "description": "Claude · Gemini · ChatGPT · Meta 공식 업데이트와 주목할 AI 논문",
+  "entries": [
+    {
+      "slug": "2026-11-18-daily",
+      "date": "2026-11-18",
+      "mode": "daily",
+      "count": 11,
+      "one_liner": "GPT-6.2, Gemini 4 Hydrogen 등 새 AI 모델과 기능이 쏟아졌어요."
+    }
+  ]
+}
